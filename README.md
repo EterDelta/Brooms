@@ -1,7 +1,7 @@
 ![](https://i.ibb.co/LPpxtq0/Brooms-Logo-1.png "Brooms!")
 
-## Brooms Mod [![curseforge](http://cf.way2muchnoise.eu/versions/brooms.svg)](https://www.curseforge.com/minecraft/mc-mods/brooms)
-___
+# Brooms Mod [![curseforge](http://cf.way2muchnoise.eu/versions/brooms.svg)](https://www.curseforge.com/minecraft/mc-mods/brooms)
+
 
 **Simple, enchantable, and balanced brooms in Minecraft.**
 

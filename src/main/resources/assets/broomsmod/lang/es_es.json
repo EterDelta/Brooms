@@ -1,0 +1,12 @@
+{
+  "entity.broomsmod.wooden_broom": "Escoba de Madera",
+  "item.broomsmod.wooden_broom": "Escoba de Madera",
+
+  "enchantment.broomsmod.air_skills": "Destreza Aerea",
+  "enchantment.broomsmod.land_skills": "Destreza Terrestre",
+  "enchantment.broomsmod.hovering": "Flotación",
+  "enchantment.broomsmod.seabreeze": "Brisa Marina",
+
+  "advancements.husbandry.ride_broom.title": "Tiempo de deshacerse de los botes",
+  "advancements.husbandry.ride_broom.description": "Monta en una escoba de madera, un vehiculo magico."
+}

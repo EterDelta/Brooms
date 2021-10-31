@@ -1,0 +1,9 @@
+{
+  "entity.wooden_broom.fall": {
+    "sounds": [
+      {
+        "name": "broomsmod:entity/broom_fall"
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "entity.broomsmod.wooden_broom": "Wooden Broom",
+  "item.broomsmod.wooden_broom": "Wooden Broom",
+
+  "enchantment.broomsmod.air_skills": "Air Skills",
+  "enchantment.broomsmod.land_skills": "Land Skills",
+  "enchantment.broomsmod.hovering": "Hovering",
+  "enchantment.broomsmod.seabreeze": "Seabreeze",
+
+  "advancements.husbandry.ride_broom.title": "Time to get rid of the Boats",
+  "advancements.husbandry.ride_broom.description": "Ride a Wooden Broom, a Magical Vehicle."
+}

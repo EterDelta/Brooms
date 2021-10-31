@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "[37,)"
+license = "MIT"
+[[mods]]
+modId = "broomsmod"
+version = "${file.jarVersion}"
+displayName = "Brooms"
+authors = "EterDelta, xbxbxb123"
+description = '''
+Adds balanced enchantable brooms to Minecraft. Fly around the world!
+'''
+
+[[dependencies.broomsmod]]
+modId = "forge"
+mandatory = true
+versionRange = "[37,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.broomsmod]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.17.1,1.18)"
+ordering = "NONE"
+side = "BOTH"

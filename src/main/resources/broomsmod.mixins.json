@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.github.eterdelta.broomsmod.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "refmap": "broomsmod.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "LocalPlayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

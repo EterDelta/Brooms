@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "item": "broomsmod:wooden_broom"
+    },
+    "title": {
+      "translate": "advancements.husbandry.ride_broom.title"
+    },
+    "description": {
+      "translate": "advancements.husbandry.ride_broom.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "ride_broom": {
+      "trigger": "minecraft:started_riding",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "vehicle": {
+                "type": "broomsmod:wooden_broom"
+              }
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ride_broom"
+    ]
+  ]
+}

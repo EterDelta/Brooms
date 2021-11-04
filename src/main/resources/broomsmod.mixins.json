@@ -2,12 +2,12 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.github.eterdelta.broomsmod.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_8",
   "refmap": "broomsmod.refmap.json",
   "mixins": [
   ],
   "client": [
-    "LocalPlayerMixin"
+    "ClientPlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

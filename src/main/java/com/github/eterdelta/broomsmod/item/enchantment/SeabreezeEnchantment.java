@@ -1,12 +1,12 @@
 package com.github.eterdelta.broomsmod.item.enchantment;
 
 import com.github.eterdelta.broomsmod.item.WoodenBroomItem;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.inventory.EquipmentSlotType;
 
 public class SeabreezeEnchantment extends Enchantment {
     public SeabreezeEnchantment() {
-        super(Rarity.RARE, WoodenBroomItem.ENCHANTMENT_CATEGORY, EquipmentSlot.values());
+        super(Rarity.RARE, WoodenBroomItem.ENCHANTMENT_CATEGORY, EquipmentSlotType.values());
     }
 
     @Override

@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[37,)"
+loaderVersion = "[36,)"
 license = "MIT"
 [[mods]]
 modId = "broomsmod"
@@ -13,13 +13,13 @@ Adds balanced enchantable brooms to Minecraft. Fly around the world!
 [[dependencies.broomsmod]]
 modId = "forge"
 mandatory = true
-versionRange = "[37,)"
+versionRange = "[36,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.broomsmod]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.17.1,1.18)"
+versionRange = "[1.16.5,1.17)"
 ordering = "NONE"
 side = "BOTH"

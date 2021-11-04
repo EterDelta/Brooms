@@ -4,37 +4,36 @@ import com.github.eterdelta.broomsmod.registry.BroomsEnchantments;
 import com.github.eterdelta.broomsmod.registry.BroomsEntities;
 import com.github.eterdelta.broomsmod.registry.BroomsItems;
 import com.github.eterdelta.broomsmod.registry.BroomsSounds;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.WaterAnimal;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.passive.WaterMobEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.GameRules;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.List;
 
 public class WoodenBroomEntity extends Entity {
-    private static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(WoodenBroomEntity.class, EntityDataSerializers.ITEM_STACK);
-    private static final EntityDataAccessor<Integer> HURT_TIME = SynchedEntityData.defineId(WoodenBroomEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> HURT_DIR = SynchedEntityData.defineId(WoodenBroomEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Float> DAMAGE = SynchedEntityData.defineId(WoodenBroomEntity.class, EntityDataSerializers.FLOAT);
+    private static final DataParameter<ItemStack> ITEM = EntityDataManager.defineId(WoodenBroomEntity.class, DataSerializers.ITEM_STACK);
+    private static final DataParameter<Integer> HURT_TIME = EntityDataManager.defineId(WoodenBroomEntity.class, DataSerializers.INT);
+    private static final DataParameter<Integer> HURT_DIR = EntityDataManager.defineId(WoodenBroomEntity.class, DataSerializers.INT);
+    private static final DataParameter<Float> DAMAGE = EntityDataManager.defineId(WoodenBroomEntity.class, DataSerializers.FLOAT);
     public int hoverTime;
     public boolean canHover;
     public boolean seaBreezing;
@@ -50,7 +49,7 @@ public class WoodenBroomEntity extends Entity {
     private double lerpYRot;
     private double lerpXRot;
 
-    public WoodenBroomEntity(EntityType<? extends WoodenBroomEntity> entityType, Level level) {
+    public WoodenBroomEntity(EntityType<? extends WoodenBroomEntity> entityType, World level) {
         super(entityType, level);
         this.blocksBuilding = true;
         this.maxUpStep = 1.5F;
@@ -58,7 +57,7 @@ public class WoodenBroomEntity extends Entity {
         this.hoverTime = this.getMaxHoverTime();
     }
 
-    public WoodenBroomEntity(ItemStack itemStack, Level level, double x, double y, double z) {
+    public WoodenBroomEntity(ItemStack itemStack, World level, double x, double y, double z) {
         this(BroomsEntities.WOODEN_BROOM.get(), level);
         this.setItem(itemStack.copy());
         this.setPos(x, y, z);
@@ -89,18 +88,17 @@ public class WoodenBroomEntity extends Entity {
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
-        } else if (!this.level.isClientSide && !this.isRemoved()) {
+        } else if (!this.level.isClientSide && this.isAlive()) {
             this.setHurtDir(-this.getHurtDir());
             this.setHurtTime(10);
             this.setDamage(this.getDamage() + amount * 10.0F);
             this.markHurt();
-            this.gameEvent(GameEvent.ENTITY_DAMAGED, source.getEntity());
-            boolean flag = source.getEntity() instanceof Player && ((Player) source.getEntity()).getAbilities().instabuild;
+            boolean flag = source.getEntity() instanceof PlayerEntity && ((PlayerEntity) source.getEntity()).abilities.instabuild;
             if (flag || this.getDamage() > 40.0F) {
                 if (!flag && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                     this.spawnBroomItem();
                 }
-                this.discard();
+                this.remove();
             }
             return true;
         } else {
@@ -128,7 +126,7 @@ public class WoodenBroomEntity extends Entity {
 
     @Override
     public boolean isPickable() {
-        return !this.isRemoved();
+        return this.isAlive();
     }
 
     @Override
@@ -186,7 +184,8 @@ public class WoodenBroomEntity extends Entity {
         }
 
         if (this.isVehicle()) {
-            this.setYRot(this.getControllingPassenger().getYRot());
+            LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
+            this.yRot = passenger.yRot;
         }
 
         if (this.isControlledByLocalInstance()) {
@@ -195,7 +194,7 @@ public class WoodenBroomEntity extends Entity {
             }
             this.move(MoverType.SELF, this.getDeltaMovement());
         } else {
-            this.setDeltaMovement(Vec3.ZERO);
+            this.setDeltaMovement(Vector3d.ZERO);
         }
 
         if (this.level.getBlockState(this.blockPosition().below()).is(Blocks.WATER) && EnchantmentHelper.getItemEnchantmentLevel(BroomsEnchantments.SEA_BREEZE.get(), this.getItem()) > 0) {
@@ -208,13 +207,13 @@ public class WoodenBroomEntity extends Entity {
         }
 
         this.checkInsideBlocks();
-        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2F, -0.01F, 0.2F), EntitySelector.pushableBy(this));
+        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2F, -0.01F, 0.2F), EntityPredicates.pushableBy(this));
         if (!list.isEmpty()) {
-            boolean flag = !this.level.isClientSide && !(this.getControllingPassenger() instanceof Player);
+            boolean flag = !this.level.isClientSide && !(this.getControllingPassenger() instanceof PlayerEntity);
 
             for (Entity entity : list) {
                 if (!entity.hasPassenger(this)) {
-                    if (flag && this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
+                    if (flag && this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterMobEntity) && !(entity instanceof PlayerEntity)) {
                         entity.startRiding(this);
                     } else {
                         this.push(entity);
@@ -225,8 +224,12 @@ public class WoodenBroomEntity extends Entity {
 
         if (this.isInWaterOrBubble()) {
             this.spawnBroomItem();
-            this.discard();
+            this.remove();
         }
+    }
+
+    @Override
+    public void turn(double p_195049_1_, double p_195049_3_) {
     }
 
     private void tickLerp() {
@@ -239,21 +242,19 @@ public class WoodenBroomEntity extends Entity {
             double stepX = this.getX() + (this.lerpX - this.getX()) / (double) this.lerpSteps;
             double stepY = this.getY() + (this.lerpY - this.getY()) / (double) this.lerpSteps;
             double stepZ = this.getZ() + (this.lerpZ - this.getZ()) / (double) this.lerpSteps;
-            float stepYRot = (float) (this.getYRot() + Mth.wrapDegrees(this.lerpYRot - this.getYRot()) / this.lerpSteps);
-            float stepXRot = this.getXRot() + (float) (this.lerpXRot - (double) this.getXRot()) / (float) this.lerpSteps;
+            this.yRot = (float) (this.yRot + MathHelper.wrapDegrees(this.lerpYRot - this.yRot) / this.lerpSteps);
+            this.xRot = this.xRot + (float) (this.lerpXRot - (double) this.xRot) / (float) this.lerpSteps;
 
-            this.setYRot(stepYRot);
-            this.setXRot(stepXRot);
             --this.lerpSteps;
             this.setPos(stepX, stepY, stepZ);
-            this.setRot(this.getYRot(), this.getXRot());
+            this.setRot(this.yRot, this.xRot);
         }
     }
 
     private void handleInputs() {
         if (this.isVehicle()) {
             LivingEntity controller = (LivingEntity) this.getControllingPassenger();
-            Vec3 inputVector = this.getInputVector(new Vec3(controller.xxa * 0.8F, 0.0D, controller.zza), this.getSpeed(), this.getYRot());
+            Vector3d inputVector = this.getInputVector(new Vector3d(controller.xxa * 0.8F, 0.0D, controller.zza), this.getSpeed(), this.yRot);
 
             if (this.inputLeft || this.inputRight || this.inputUp || this.inputDown) {
                 this.setDeltaMovement(this.getDeltaMovement().add(inputVector));
@@ -268,31 +269,33 @@ public class WoodenBroomEntity extends Entity {
     @Override
     public void positionRider(Entity rider) {
         super.positionRider(rider);
-        if (rider instanceof Player player) {
-            player.setYBodyRot(player.getYHeadRot());
+        if (rider instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) rider;
+            player.yBodyRot = this.yRotO;
         }
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag compoundTag) {
-        compoundTag.put("Item", this.getItem().save(new CompoundTag()));
+    protected void addAdditionalSaveData(CompoundNBT compoundTag) {
+        compoundTag.put("Item", this.getItem().save(new CompoundNBT()));
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compoundTag) {
-        CompoundTag itemTag = compoundTag.getCompound("Item");
+    protected void readAdditionalSaveData(CompoundNBT compoundTag) {
+        CompoundNBT itemTag = compoundTag.getCompound("Item");
         this.setItem(ItemStack.of(itemTag));
     }
 
+
     @Override
-    public InteractionResult interact(Player p_38330_, InteractionHand p_38331_) {
+    public ActionResultType interact(PlayerEntity p_38330_, Hand p_38331_) {
         if (p_38330_.isSecondaryUseActive()) {
-            return InteractionResult.PASS;
+            return ActionResultType.PASS;
         } else {
             if (!this.level.isClientSide()) {
-                return p_38330_.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
+                return p_38330_.startRiding(this) ? ActionResultType.CONSUME : ActionResultType.PASS;
             } else {
-                return InteractionResult.SUCCESS;
+                return ActionResultType.SUCCESS;
             }
         }
     }
@@ -304,7 +307,8 @@ public class WoodenBroomEntity extends Entity {
 
     @Override
     public Entity getControllingPassenger() {
-        return this.getFirstPassenger();
+        List<Entity> list = this.getPassengers();
+        return list.isEmpty() ? null : list.get(0);
     }
 
     public void setInputs(boolean left, boolean right, boolean up, boolean down, boolean jumping) {
@@ -316,7 +320,7 @@ public class WoodenBroomEntity extends Entity {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -329,20 +333,15 @@ public class WoodenBroomEntity extends Entity {
         }
     }
 
-    @Override
-    public ItemStack getPickResult() {
-        return new ItemStack(BroomsItems.WOODEN_BROOM.get());
-    }
-
-    public Vec3 getInputVector(Vec3 movement, float speed, float angle) {
+    public Vector3d getInputVector(Vector3d movement, float speed, float angle) {
         double length = movement.lengthSqr();
         if (length < 1.0E-7D) {
-            return Vec3.ZERO;
+            return Vector3d.ZERO;
         } else {
-            Vec3 vec3 = (length > 1.0D ? movement.normalize() : movement).scale(speed);
-            float f = Mth.sin(angle * ((float) Math.PI / 180F));
-            float f1 = Mth.cos(angle * ((float) Math.PI / 180F));
-            return new Vec3(vec3.x * (double) f1 - vec3.z * (double) f, vec3.y, vec3.z * (double) f1 + vec3.x * (double) f);
+            Vector3d vec3 = (length > 1.0D ? movement.normalize() : movement).scale(speed);
+            float f = MathHelper.sin(angle * ((float) Math.PI / 180F));
+            float f1 = MathHelper.cos(angle * ((float) Math.PI / 180F));
+            return new Vector3d(vec3.x * (double) f1 - vec3.z * (double) f, vec3.y, vec3.z * (double) f1 + vec3.x * (double) f);
         }
     }
 

@@ -1,4 +1,11 @@
 {
+  "entity.wooden_broom.destroy": {
+    "sounds": [
+      {
+        "name": "broomsmod:entity/broom_destroy"
+      }
+    ]
+  },
   "entity.wooden_broom.fall": {
     "sounds": [
       {

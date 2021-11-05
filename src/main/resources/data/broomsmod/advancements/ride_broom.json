@@ -17,7 +17,7 @@
   },
   "criteria": {
     "ride_broom": {
-      "trigger": "minecraft:started_riding",
+      "trigger": "broomsmod:started_riding_broom",
       "conditions": {
         "player": [
           {

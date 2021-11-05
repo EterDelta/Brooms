@@ -1,5 +1,6 @@
 package com.github.eterdelta.broomsmod.entity;
 
+import com.github.eterdelta.broomsmod.BroomsMod;
 import com.github.eterdelta.broomsmod.registry.BroomsEnchantments;
 import com.github.eterdelta.broomsmod.registry.BroomsEntities;
 import com.github.eterdelta.broomsmod.registry.BroomsItems;
@@ -13,6 +14,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -293,7 +295,12 @@ public class WoodenBroomEntity extends Entity {
             return ActionResultType.PASS;
         } else {
             if (!this.level.isClientSide()) {
-                return p_38330_.startRiding(this) ? ActionResultType.CONSUME : ActionResultType.PASS;
+                if (p_38330_.startRiding(this)) {
+                    BroomsMod.startRidingBroomTrigger.trigger((ServerPlayerEntity) p_38330_);
+                    return ActionResultType.CONSUME;
+                } else {
+                    return ActionResultType.PASS;
+                }
             } else {
                 return ActionResultType.SUCCESS;
             }

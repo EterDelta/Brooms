@@ -53,7 +53,6 @@ public class WoodenBroomEntity extends Entity {
     public WoodenBroomEntity(EntityType<? extends WoodenBroomEntity> entityType, Level level) {
         super(entityType, level);
         this.blocksBuilding = true;
-        this.maxUpStep = 1.5F;
         this.canHover = true;
         this.hoverTime = this.getMaxHoverTime();
     }

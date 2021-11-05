@@ -222,6 +222,7 @@ public class WoodenBroomEntity extends Entity {
         }
 
         if (this.isInWaterOrBubble()) {
+            this.playSound(BroomsSounds.BROOM_DESTROY.get(), 0.8F, 1.0F);
             this.spawnBroomItem();
             this.remove();
         }

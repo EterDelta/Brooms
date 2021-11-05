@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'com.github.eterdelta.broomsmod'
-version = '1.16.5-1.0.1'
+version = '1.16.5-1.1.0'
 
 java {
     archivesBaseName = 'BroomsMod'

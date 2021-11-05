@@ -170,7 +170,7 @@ public class WoodenBroomEntity extends Entity {
             this.hoverTime = this.getMaxHoverTime();
         }
 
-        if (!this.isNoGravity() && !this.seaBreezing) {
+        if (!this.isNoGravity()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.03D, 0.0D));
         }
 
@@ -199,7 +199,7 @@ public class WoodenBroomEntity extends Entity {
         if (this.level.getBlockState(this.blockPosition().below()).is(Blocks.WATER) && EnchantmentHelper.getItemEnchantmentLevel(BroomsEnchantments.SEA_BREEZE.get(), this.getItem()) > 0) {
             this.seaBreezing = true;
             if (this.getDeltaMovement().y() < 0) {
-                this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
+                this.setDeltaMovement(this.getDeltaMovement().multiply(0.9D, 0.3D, 0.9D));
             }
         } else {
             this.seaBreezing = false;

@@ -2,10 +2,19 @@
   "entity.broomsmod.wooden_broom": "Escoba de Madera",
   "item.broomsmod.wooden_broom": "Escoba de Madera",
 
+
   "enchantment.broomsmod.air_skills": "Destreza Aerea",
+  "enchantment.broomsmod.air_skills.desc": "Aumenta la velocidad de una escoba en el aire un 20% por nivel, hasta 3 niveles.",
+
   "enchantment.broomsmod.land_skills": "Destreza Terrestre",
+  "enchantment.broomsmod.land_skills.desc": "Aumenta la velocidad de una escoba en el suelo un 20% por nivel, hasta 3 niveles.",
+
   "enchantment.broomsmod.hovering": "Flotación",
+  "enchantment.broomsmod.hovering.desc": "Aumenta el tiempo máximo de vuelo de una escoba en un 25% por nivel, hasta 4 niveles.",
+
   "enchantment.broomsmod.seabreeze": "Brisa Marina",
+  "enchantment.broomsmod.seabreeze.desc": "Cuando una escoba esté cerca del agua, se ralentizará y se recargará, permitiéndo volar de nuevo.",
+
 
   "advancements.husbandry.ride_broom.title": "Tiempo de deshacerse de los botes",
   "advancements.husbandry.ride_broom.description": "Monta en una escoba de madera, un vehiculo magico."

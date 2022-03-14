@@ -6,9 +6,9 @@ import com.github.eterdelta.broomsmod.item.enchantment.HoveringEnchantment;
 import com.github.eterdelta.broomsmod.item.enchantment.LandSkillsEnchantment;
 import com.github.eterdelta.broomsmod.item.enchantment.SeabreezeEnchantment;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class BroomsEnchantments {
 

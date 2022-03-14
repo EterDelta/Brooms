@@ -14,16 +14,16 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'com.github.eterdelta.broomsmod'
-version = '1.17.1-1.1.1'
+version = '1.18.2-1.1.1'
 
 java {
     archivesBaseName = 'BroomsMod'
-    toolchain.languageVersion = JavaLanguageVersion.of(16)
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
 minecraft {
 
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'official', version: '1.18.2'
 
     runs {
         client {
@@ -81,7 +81,7 @@ repositories {
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.75'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.10'
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
 

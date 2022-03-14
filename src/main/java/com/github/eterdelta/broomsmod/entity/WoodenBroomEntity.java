@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 
@@ -150,7 +150,7 @@ public class WoodenBroomEntity extends Entity {
         super.tick();
         this.tickLerp();
 
-        /* onGround check for client is movement dependent, so it will return
+        /* onGround check for client is movement dependent, it will return
          * true every time the broom reaches 0.0 speed in the air.
          * This speed tweak smooths the broom movements and solves the problem.
          */

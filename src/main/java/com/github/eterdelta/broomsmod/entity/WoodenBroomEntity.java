@@ -93,7 +93,7 @@ public class WoodenBroomEntity extends Entity {
             this.setHurtTime(10);
             this.setDamage(this.getDamage() + amount * 10.0F);
             this.markHurt();
-            this.gameEvent(GameEvent.ENTITY_DAMAGED, source.getEntity());
+            this.gameEvent(GameEvent.ENTITY_DAMAGE, source.getEntity());
             boolean flag = source.getEntity() instanceof Player && ((Player) source.getEntity()).getAbilities().instabuild;
             if (flag || this.getDamage() > 40.0F) {
                 if (!flag && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
@@ -150,10 +150,6 @@ public class WoodenBroomEntity extends Entity {
         super.tick();
         this.tickLerp();
 
-        /* onGround check for client is movement dependent, it will return
-         * true every time the broom reaches 0.0 speed in the air.
-         * This speed tweak smooths the broom movements and solves the problem.
-         */
         this.setDeltaMovement(this.getDeltaMovement().multiply(0.8D, 0.9D, 0.8D));
 
         if (!this.isOnGround() && !this.seaBreezing) {
@@ -232,7 +228,7 @@ public class WoodenBroomEntity extends Entity {
     private void tickLerp() {
         if (this.isControlledByLocalInstance()) {
             this.lerpSteps = 0;
-            this.setPacketCoordinates(this.getX(), this.getY(), this.getZ());
+            this.syncPacketPositionCodec(this.getX(), this.getY(), this.getZ());
         }
 
         if (this.lerpSteps > 0) {
@@ -392,13 +388,13 @@ public class WoodenBroomEntity extends Entity {
 
     public float getSpeed() {
         if (this.isOnGround()) {
-            return 0.08F + (0.08F * (EnchantmentHelper.getItemEnchantmentLevel(BroomsEnchantments.LAND_SKILLS.get(), this.getItem()) * 20 / 100.0F));
+            return 0.08F + (0.08F * (this.getItem().getEnchantmentLevel(BroomsEnchantments.LAND_SKILLS.get())) * 20 / 100.0F);
         } else {
-            return 0.08F + (0.08F * (EnchantmentHelper.getItemEnchantmentLevel(BroomsEnchantments.AIR_SKILLS.get(), this.getItem()) * 20 / 100.0F));
+            return 0.08F + (0.08F * (this.getItem().getEnchantmentLevel(BroomsEnchantments.AIR_SKILLS.get())) * 20 / 100.0F);
         }
     }
 
     public int getMaxHoverTime() {
-        return (int) (100 + (100 * (EnchantmentHelper.getItemEnchantmentLevel(BroomsEnchantments.HOVERING.get(), this.getItem()) * 25 / 100.0F)));
+        return (int) (100 + (100 * (this.getItem().getEnchantmentLevel(BroomsEnchantments.HOVERING.get())) * 25 / 100.0F));
     }
 }

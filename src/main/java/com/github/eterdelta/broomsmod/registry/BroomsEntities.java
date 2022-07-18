@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class BroomsEntities {
 
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, BroomsMod.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, BroomsMod.MODID);
 
     public static final RegistryObject<EntityType<WoodenBroomEntity>> WOODEN_BROOM = registerBroom(WoodenBroomEntity::new, "wooden_broom");
 

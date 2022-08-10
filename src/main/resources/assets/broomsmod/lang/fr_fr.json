@@ -1,0 +1,21 @@
+{
+  "entity.broomsmod.wooden_broom": "Balai en bois",
+  "item.broomsmod.wooden_broom": "Balai en bois",
+
+  
+  "enchantment.broomsmod.air_skills": "Talents aériens",
+  "enchantment.broomsmod.air_skills.desc": "Augmente la vitesse du balai dans les airs",
+  
+  "enchantment.broomsmod.land_skills": "Talents terrestres",
+  "enchantment.broomsmod.land_skills.desc": "Augmente la vitesse du balai au sol",
+  
+  "enchantment.broomsmod.hovering": "Survol",
+  "enchantment.broomsmod.hovering.desc": "Augmente le temps de vol maximum du balai",
+  
+  "enchantment.broomsmod.seabreeze": "Brise marine",
+  "enchantment.broomsmod.seabreeze.desc": "Recharge et ralenti le balai au dessus de l'eau",
+  
+
+  "advancements.husbandry.ride_broom.title": "Au revoir les bâteaux",
+  "advancements.husbandry.ride_broom.description": "Chevaucher un balai en bois, un véhicule magique."
+}

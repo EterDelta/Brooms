@@ -196,7 +196,7 @@ public class WoodenBroomEntity extends Entity {
         if (this.level.getBlockState(this.blockPosition().below()).is(Blocks.WATER) && EnchantmentHelper.getItemEnchantmentLevel(BroomsEnchantments.SEA_BREEZE.get(), this.getItem()) > 0) {
             this.seaBreezing = true;
             if (this.getDeltaMovement().y() < 0) {
-                this.setDeltaMovement(this.getDeltaMovement().multiply(0.9D, 0.3D, 0.9D));
+                this.setDeltaMovement(this.getDeltaMovement().multiply(0.8D, 0.2D, 0.8D));
             }
         } else {
             this.seaBreezing = false;

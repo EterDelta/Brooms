@@ -150,10 +150,6 @@ public class WoodenBroomEntity extends Entity {
         super.tick();
         this.tickLerp();
 
-        /* onGround check for client is movement dependent, it will return
-         * true every time the broom reaches 0.0 speed in the air.
-         * This speed tweak smooths the broom movements and solves the problem.
-         */
         this.setDeltaMovement(this.getDeltaMovement().multiply(0.8D, 0.9D, 0.8D));
 
         if (!this.isOnGround() && !this.seaBreezing) {

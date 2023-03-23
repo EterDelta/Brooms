@@ -193,7 +193,7 @@ public class WoodenBroomEntity extends Entity {
             this.setDeltaMovement(Vec3.ZERO);
         }
 
-        if (this.level.getBlockState(this.blockPosition().below()).is(Blocks.WATER) && EnchantmentHelper.getItemEnchantmentLevel(BroomsEnchantments.SEA_BREEZE.get(), this.getItem()) > 0) {
+        if (this.getSeabreeze() > 0 && this.level.getBlockState(this.blockPosition().below()).is(Blocks.WATER)) {
             this.seaBreezing = true;
             if (this.getDeltaMovement().y() < 0) {
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.8D, 0.2D, 0.8D));
@@ -203,20 +203,7 @@ public class WoodenBroomEntity extends Entity {
         }
 
         this.checkInsideBlocks();
-        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2F, -0.01F, 0.2F), EntitySelector.pushableBy(this));
-        if (!list.isEmpty()) {
-            boolean flag = !this.level.isClientSide && !(this.getControllingPassenger() instanceof Player);
-
-            for (Entity entity : list) {
-                if (!entity.hasPassenger(this)) {
-                    if (flag && this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
-                        entity.startRiding(this);
-                    } else {
-                        this.push(entity);
-                    }
-                }
-            }
-        }
+        this.checkInsideEntities();
 
         if (this.isInWaterOrBubble()) {
             this.playSound(BroomsSounds.BROOM_DESTROY.get(), 0.8F, 1.0F);
@@ -257,6 +244,23 @@ public class WoodenBroomEntity extends Entity {
 
             if (this.inputJump && this.canHover) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0D, this.getHoverSpeed(), 0.0D));
+            }
+        }
+    }
+
+    private void checkInsideEntities() {
+        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2F, -0.01F, 0.2F), EntitySelector.pushableBy(this));
+        if (!list.isEmpty()) {
+            boolean serverLogic = !this.level.isClientSide && !(this.getControllingPassenger() instanceof Player);
+
+            for (Entity entity : list) {
+                if (!entity.hasPassenger(this)) {
+                    if (serverLogic && this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
+                        entity.startRiding(this);
+                    } else {
+                        this.push(entity);
+                    }
+                }
             }
         }
     }
@@ -396,5 +400,9 @@ public class WoodenBroomEntity extends Entity {
 
     public int getMaxHoverTime() {
         return (int) (100 + (100 * (EnchantmentHelper.getItemEnchantmentLevel(BroomsEnchantments.HOVERING.get(), this.getItem()) * 25 / 100.0F)));
+    }
+
+    public int getSeabreeze() {
+        return EnchantmentHelper.getItemEnchantmentLevel(BroomsEnchantments.SEA_BREEZE.get(), this.getItem());
     }
 }
